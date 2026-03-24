@@ -1,9 +1,0 @@
-library(traitR)
-
-addDataset("origin/Beak shape.xlsx","excel","Beak_shape","PhyloName")
-addDataset("origin/clutch_dataset1.csv","csv","Clutch_dataset_1","binomial")
-addDataset("origin/clutch_dataset2.csv","csv","Clutch_dataset_2","binomial")
-addDataset("origin/Nest-traits-Dataset-S1.csv","csv","Nest_traits_1","Species scientific name")
-#addDataset("origin/Nest-traits-Dataset-S2.csv","csv","Nest_traits_2","Species scientific name 2")
-#addDataset("origin/SAviTraits_1-0_1.csv","csv","SAvi_1","Species_Scientific_Name")
-addDataset("origin/SAviTraits_1-0_2.csv","csv","SAvi_2","Species_Scientific_Name_2")

@@ -2,18 +2,31 @@
 % Please edit documentation in R/compDB.R
 \name{createDatabase}
 \alias{createDatabase}
-\title{Setups the initial database that will be the foundation of the system.
-Please ensure that your project has a data, temp and out folders.
-Please ensure you have the config.json and AviList-v2025-11Jun-extended.xlsx files found in the github in the
-root of your project.
-Run this only for initial setup, if you run it again it will overwrite the main database file, which will cause the system to break.}
+\title{Initialize comparative database.}
 \usage{
 createDatabase()
 }
 \description{
 Setups the initial database that will be the foundation of the system.
-Please ensure that your project has a data, temp and out folders.
-Please ensure you have the config.json and AviList-v2025-11Jun-extended.xlsx files found in the github in the
-root of your project.
-Run this only for initial setup, if you run it again it will overwrite the main database file, which will cause the system to break.
+}
+\details{
+The function loads AviList-v2025-11Jun-extended.xlsx file (read below for details on where to download it), it will use Pytaxon to standardize the names and create
+data/species_subspeciesOnly.csv which is the master list for the database.
+
+Please ensure that your execution path has a data, temp and out folders.
+Please ensure you have copied the config.json (required by Pytaxon) and AviList-v2025-11Jun-extended.xlsx files, found in the github of the project, to the
+root of your execution path.
+
+Example, if using RStudio and the project is at /home/user/RProject1 the following should exist:
+
+ * /home/user/RProject1/data/
+ * /home/user/RProject1/temp/
+ * /home/user/RProject1/out/
+ * /home/user/RProject1/AviList-v2025-11Jun-extended.xlsx
+ * /home/user/RProject1/config.json
+
+IMPORTANT: Run this only for initial setup, if you run it again it will overwrite the main database file, which will cause the system to break.
+}
+\examples{
+createDatabase()
 }

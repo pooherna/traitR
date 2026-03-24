@@ -27,11 +27,28 @@ setPythonEnv <- function() {
 #source_python('inst/python/obtainData.py')
 #source_python('inst/python/speciesVerifier.py')
 
+#' Initialize comparative database.
+#'
 #' Setups the initial database that will be the foundation of the system.
-#' Please ensure that your project has a data, temp and out folders.
-#' Please ensure you have the config.json and AviList-v2025-11Jun-extended.xlsx files found in the github in the
-#' root of your project.
-#' Run this only for initial setup, if you run it again it will overwrite the main database file, which will cause the system to break.
+#'
+#' The function loads AviList-v2025-11Jun-extended.xlsx file (read below for details on where to download it), it will use Pytaxon to standardize the names and create
+#' data/species_subspeciesOnly.csv which is the master list for the database.
+#'
+#' Please ensure that your execution path has a data, temp and out folders.
+#' Please ensure you have copied the config.json (required by Pytaxon) and AviList-v2025-11Jun-extended.xlsx files, found in the github of the project, to the
+#' root of your execution path.
+#'
+#' Example, if using RStudio and the project is at /home/user/RProject1 the following should exist:
+#'
+#'  * /home/user/RProject1/data/
+#'  * /home/user/RProject1/temp/
+#'  * /home/user/RProject1/out/
+#'  * /home/user/RProject1/AviList-v2025-11Jun-extended.xlsx
+#'  * /home/user/RProject1/config.json
+#'
+#' IMPORTANT: Run this only for initial setup, if you run it again it will overwrite the main database file, which will cause the system to break.
+#' @examples
+#' createDatabase()
 #' @export
 createDatabase <- function() {
   setPythonEnv()
@@ -39,12 +56,24 @@ createDatabase <- function() {
   speciesLoader$loadSpecies("AviList-v2025-11Jun-extended.xlsx","Scientific_name","Taxon_rank")
 }
 
-#' Function to add a new dataset to the local database.
+#' Add a new dataset to the comparative database.
 #'
-#' @param datasetFile String. Relative path of the file containing the dataset you wish to add.
+#' Adds the provided dataset as a new data file that can be queried by the comparative database.
+#'
+#' The function loads the provided dataset file (either a CSV or Excel file) and creates a new CSV file with the datasetName in the data folder.
+#'
+#' The function also runs the species name in the dataset through Pytaxon and then looks them up in the system's master list. If the species is found it registers
+#' that it has information of that species in the new dataset, if it is not found it adds the species to the verification list so that a user can later match it to
+#' the appropriate species in the master list.
+#'
+#' The new file contains the original data plus additional data added by the system so it can be queried.
+#'
+#' @param datasetFile String. Relative path, from execution path, of the file containing the dataset you wish to add.
 #' @param datasetFileType String. The format of the dataset file. Accepts: excel, csv.
-#' @param datasetName String. The name of the dataset.
-#' @param speciesColumn String. The name of the column that contains the scientific names of the species in the dataset.
+#' @param datasetName String. The name to assign to the dataset. This will be the name the rest of the system will indetify this dataset as.
+#' @param speciesColumn String. The name of the column that specifies the scientific names of the species in the dataset.
+#' @examples
+#' addDataset("origin/Chia_NestTrait.csv","csv","Nest data","Scientific_name")
 #' @export
 addDataset <- function(datasetFile,datasetFileType,datasetName,speciesColumn) {
   setPythonEnv()

@@ -2,19 +2,31 @@
 % Please edit documentation in R/compDB.R
 \name{addDataset}
 \alias{addDataset}
-\title{Function to add a new dataset to the local database.}
+\title{Add a new dataset to the comparative database.}
 \usage{
 addDataset(datasetFile, datasetFileType, datasetName, speciesColumn)
 }
 \arguments{
-\item{datasetFile}{String. Relative path of the file containing the dataset you wish to add.}
+\item{datasetFile}{String. Relative path, from execution path, of the file containing the dataset you wish to add.}
 
 \item{datasetFileType}{String. The format of the dataset file. Accepts: excel, csv.}
 
-\item{datasetName}{String. The name of the dataset.}
+\item{datasetName}{String. The name to assign to the dataset. This will be the name the rest of the system will indetify this dataset as.}
 
-\item{speciesColumn}{String. The name of the column that contains the scientific names of the species in the dataset.}
+\item{speciesColumn}{String. The name of the column that specifies the scientific names of the species in the dataset.}
 }
 \description{
-Function to add a new dataset to the local database.
+Adds the provided dataset as a new data file that can be queried by the comparative database.
+}
+\details{
+The function loads the provided dataset file (either a CSV or Excel file) and creates a new CSV file with the datasetName in the data folder.
+
+The function also runs the species name in the dataset through Pytaxon and then looks them up in the system's master list. If the species is found it registers
+that it has information of that species in the new dataset, if it is not found it adds the species to the verification list so that a user can later match it to
+the appropriate species in the master list.
+
+The new file contains the original data plus additional data added by the system so it can be queried.
+}
+\examples{
+addDataset("origin/Chia_NestTrait.csv","csv","Nest data","Scientific_name")
 }
