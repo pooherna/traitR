@@ -2,7 +2,7 @@
 % Please edit documentation in R/compDB.R
 \name{traitSearch}
 \alias{traitSearch}
-\title{Function to obtain data for the species provided from the list of datasets provided.}
+\title{Obtain requested trait data for specified species from specified datasets.}
 \usage{
 traitSearch(speciesName, traits, datasets)
 }
@@ -17,5 +17,10 @@ traitSearch(speciesName, traits, datasets)
 Data frame with the desired trait data for the specified species. Function will also save results to out/testObtain.csv.
 }
 \description{
-Function to obtain data for the species provided from the list of datasets provided.
+Obtain requested trait data for specified species from specified datasets.
+}
+\examples{
+
+traitSearch(speciesHacketString,traitsNestString,"Nest data")
+
 }

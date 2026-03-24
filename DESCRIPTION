@@ -1,7 +1,7 @@
 Package: traitR
 Type: Package
 Title: traitR: A package to create and manage a comparative database
-Version: 0.1.2
+Version: 0.2
 Authors@R: c(
     person(
       "Sergio", "Poo Hernandez",

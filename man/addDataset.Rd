@@ -21,12 +21,15 @@ Adds the provided dataset as a new data file that can be queried by the comparat
 \details{
 The function loads the provided dataset file (either a CSV or Excel file) and creates a new CSV file with the datasetName in the data folder.
 
-The function also runs the species name in the dataset through Pytaxon and then looks them up in the system's master list. If the species is found it registers
+The function also runs the species names in the dataset through Pytaxon and then looks them up in the system's master list. If the species is found it registers
 that it has information of that species in the new dataset, if it is not found it adds the species to the verification list so that a user can later match it to
 the appropriate species in the master list.
 
 The new file contains the original data plus additional data added by the system so it can be queried.
 }
 \examples{
+In this example we will add the dataset "Chia_NestTrait.csv" to the database. In this dataset the column containing the species name is "Scientific_name", the file is located in the folder
+"origin" and we want to save it as "Nest data". To add it we would run the following instruction:
+
 addDataset("origin/Chia_NestTrait.csv","csv","Nest data","Scientific_name")
 }

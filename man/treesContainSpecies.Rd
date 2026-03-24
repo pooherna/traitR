@@ -2,7 +2,7 @@
 % Please edit documentation in R/compDB.R
 \name{treesContainSpecies}
 \alias{treesContainSpecies}
-\title{Returns a Data frame with the trees that include at least one of the specified species.}
+\title{Obtain the trees that contain the provided species.}
 \usage{
 treesContainSpecies(speciesNames)
 }
@@ -13,5 +13,17 @@ treesContainSpecies(speciesNames)
 A data frame with the trees that contain at least one of the specified species.
 }
 \description{
-Returns a Data frame with the trees that include at least one of the specified species.
+Function returns a Data frame that lists all trees that contain the species provided as input.
+}
+\details{
+The function looks for each species in the master list and builds a list of unique tree name that contain at least one of the species requested.
+
+The result is a list of all trees that contain at least one of the species requested.
+}
+\examples{
+
+speciesHacket <- speciesInTrees("origin/Stage2_Hackett_MCC_no_neg.tre")
+speciesHacketString <- paste(speciesHacket,collapse=",")
+treesContainSpecies(speciesHacketString)
+
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/compDB.R
 \name{datasetsIncludeSpecies}
 \alias{datasetsIncludeSpecies}
-\title{Returns a Data frame with all datasets that contain the provided species.}
+\title{Obtain the datasets that contain the provided species.}
 \usage{
 datasetsIncludeSpecies(speciesName)
 }
@@ -13,5 +13,17 @@ datasetsIncludeSpecies(speciesName)
 Data frame with all datasets in database that contain at least one of the species provided.
 }
 \description{
-Returns a Data frame with all datasets that contain the provided species.
+Function returns a Data frame that lists all datasets that contain the species provided as input.
+}
+\details{
+The function looks for each species in the master list and builds a list of unique dataset name that contain at least one of the species requested.
+
+The result is a list of all datasets that contain at least one of the species requested.
+}
+\examples{
+
+speciesHacket <- speciesInTrees("origin/Stage2_Hackett_MCC_no_neg.tre")
+speciesHacketString <- paste(speciesHacket,collapse=",")
+datasetsIncludeSpecies(speciesHacketString)
+
 }

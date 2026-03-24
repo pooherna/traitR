@@ -62,7 +62,7 @@ createDatabase <- function() {
 #'
 #' The function loads the provided dataset file (either a CSV or Excel file) and creates a new CSV file with the datasetName in the data folder.
 #'
-#' The function also runs the species name in the dataset through Pytaxon and then looks them up in the system's master list. If the species is found it registers
+#' The function also runs the species names in the dataset through Pytaxon and then looks them up in the system's master list. If the species is found it registers
 #' that it has information of that species in the new dataset, if it is not found it adds the species to the verification list so that a user can later match it to
 #' the appropriate species in the master list.
 #'
@@ -73,6 +73,9 @@ createDatabase <- function() {
 #' @param datasetName String. The name to assign to the dataset. This will be the name the rest of the system will indetify this dataset as.
 #' @param speciesColumn String. The name of the column that specifies the scientific names of the species in the dataset.
 #' @examples
+#' In this example we will add the dataset "Chia_NestTrait.csv" to the database. In this dataset the column containing the species name is "Scientific_name", the file is located in the folder
+#' "origin" and we want to save it as "Nest data". To add it we would run the following instruction:
+#'
 #' addDataset("origin/Chia_NestTrait.csv","csv","Nest data","Scientific_name")
 #' @export
 addDataset <- function(datasetFile,datasetFileType,datasetName,speciesColumn) {
@@ -81,23 +84,44 @@ addDataset <- function(datasetFile,datasetFileType,datasetName,speciesColumn) {
   datasetLoader$addDataset(datasetFile,datasetFileType,datasetName,speciesColumn)
 }
 
-#' Function to add a new phylogenetic tree to the local database.
+#' Add a new phylogenetic tree to the comparative database.
 #'
-#' @param treeFile String. Relative path of the file containing the tree you wish to add.
+#' Adds the provided phylogenetic tree to the comparative database and regiters the species it contains.
+#'
+#' The function loads the provided tree file (see below for accepted format) register it in the trees.csv file and registers which species are in the tree.
+#'
+#' The function also runs the species names in the tree through Pytaxon and then looks them up in the system's master list. If the species is found it registers
+#' that the species can be found in this tree, if it is not found it adds the species to the verification list so that a user can later match it to
+#' the appropriate species in the master list.
+#'
+#' The tree formats accepted are: newick, nexus, nexml, phyloxml and cdao
+#'
+#' @param treeFile String. Relative path, from execution path, of the file containing the tree you wish to add.
 #' @param treeFileFormat String. The format of the dataset file. Accepts: newick, nexus, nexml, phyloxml, cdao.
+#' @examples
+#' In this example we will add the tree "Stage2_Hackett_MCC_no_neg.tre" to the database. This tree is in newick format, the file is located in the folder
+#' "origin". To add it we would run the following instruction:
+#'
+#' addTree("origin/Stage2_Hackett_MCC_no_neg.tre","newick")
 #' @export
 addTree <- function(treeFile,treeFileFormat) {
   setPythonEnv()
   treeLoader <- import_from_path("matchTree", path = system.file("python", package = "traitR", mustWork = TRUE))
-  treeLoader$addTree(treeFile,treeFileFormat)
+  treeLoader$add_tree(treeFile,treeFileFormat)
 }
 
-#' Function to obtain data for the species provided from the list of datasets provided.
+#' Obtain requested trait data for specified species from specified datasets.
+#'
+#'
 #'
 #' @param speciesName String. Scientific name of the species you are interested in obtaining data for.
 #' @param traits String. Comma separated list of traits you want the data for.
 #' @param datasets String. Comma separated list of datasets containing the desired traits.
 #' @return Data frame with the desired trait data for the specified species. Function will also save results to out/testObtain.csv.
+#' @examples
+#'
+#' traitSearch(speciesHacketString,traitsNestString,"Nest data")
+#'
 #' @export
 traitSearch <- function(speciesName,traits,datasets) {
   setPythonEnv()
@@ -107,10 +131,22 @@ traitSearch <- function(speciesName,traits,datasets) {
   dataSearch$obtainData(as.list(strsplit(speciesName,",")[[1]]),as.list(strsplit(traits,",")[[1]]),as.list(strsplit(datasets,",")[[1]]))
 }
 
-#' Returns a Data frame with all datasets that contain the provided species.
+#' Obtain the datasets that contain the provided species.
+#'
+#' Function returns a Data frame that lists all datasets that contain the species provided as input.
+#'
+#' The function looks for each species in the master list and builds a list of unique dataset name that contain at least one of the species requested.
+#'
+#' The result is a list of all datasets that contain at least one of the species requested.
 #'
 #' @param speciesName String. Comma separated list of scientific name for species to find.
 #' @return Data frame with all datasets in database that contain at least one of the species provided.
+#' @examples
+#'
+#' speciesHacket <- speciesInTrees("origin/Stage2_Hackett_MCC_no_neg.tre")
+#' speciesHacketString <- paste(speciesHacket,collapse=",")
+#' datasetsIncludeSpecies(speciesHacketString)
+#'
 #' @export
 datasetsIncludeSpecies <- function(speciesName) {
   setPythonEnv()
@@ -129,10 +165,22 @@ traitsInDatasets <- function(datasetNames) {
   dataSearch$traitsInDatasets(as.list(strsplit(datasetNames,",")[[1]]))
 }
 
-#' Returns a Data frame with the trees that include at least one of the specified species.
+#' Obtain the trees that contain the provided species.
+#'
+#' Function returns a Data frame that lists all trees that contain the species provided as input.
+#'
+#' The function looks for each species in the master list and builds a list of unique tree name that contain at least one of the species requested.
+#'
+#' The result is a list of all trees that contain at least one of the species requested.
 #'
 #' @param speciesNames String. Comma separated list of scientific name for species to find.
 #' @return A data frame with the trees that contain at least one of the specified species.
+#' @examples
+#'
+#' speciesHacket <- speciesInTrees("origin/Stage2_Hackett_MCC_no_neg.tre")
+#' speciesHacketString <- paste(speciesHacket,collapse=",")
+#' treesContainSpecies(speciesHacketString)
+#'
 #' @export
 treesContainSpecies <- function(speciesNames) {
   setPythonEnv()
