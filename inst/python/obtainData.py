@@ -218,6 +218,29 @@ def speciesInTrees(treesList):
         
     return speciesFound
 
+def speciesNameInTree(tree):
+    treeFileName = "data/trees.csv"
+    recordedTreesDF = pd.read_csv(treeFileName,header=0)
+    
+    speciesFound = []
+    
+    treeData = recordedTreesDF[recordedTreesDF["treeName"] == tree]
+    treeSpecies = treeData["speciesIncludedWithOriginal"].tolist()
+    #print(treeSpecies)
+    treeSpeciesList = treeSpecies[0].split(",")        
+    #print(treeSpeciesList)
+        
+    for species in treeSpeciesList:
+        
+        species = species.replace("(","")
+        species = species.replace(")","")
+        #speciesEntryElements = speciesEntry.split(";")
+        #species = speciesEntryElements[0]
+        
+        speciesFound.append(species)
+        
+    return speciesFound
+
 def listTrees():
     treeFileName = "data/trees.csv"
     

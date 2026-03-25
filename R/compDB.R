@@ -40,8 +40,8 @@ setPythonEnv <- function() {
 #'
 #' Example, if using RStudio and the project is at /home/user/RProject1 the following should exist:
 #'
-#'  * /home/user/RProject1/data/
-#'  * /home/user/RProject1/temp/
+#'  # /home/user/RProject1/data/
+#'  # /home/user/RProject1/temp/ **
 #'  * /home/user/RProject1/out/
 #'  * /home/user/RProject1/AviList-v2025-11Jun-extended.xlsx
 #'  * /home/user/RProject1/config.json
@@ -196,6 +196,18 @@ speciesInTrees <- function(treeNames) {
   setPythonEnv()
   dataSearch <- import_from_path("obtainData", path = system.file("python", package = "traitR", mustWork = TRUE))
   dataSearch$speciesInTrees(as.list(strsplit(treeNames,",")[[1]]))
+}
+
+#' Returns a Data frame where each entry is ";" separated tupple containing: first the name of the species as it appears in the tree the species names as are in the tree and second the name
+#' of the species used in the database.
+#' @param treeName String. Tree to obtain species names from.
+#' @return A data frame where each entry is ";" separated tupple containing: first the name of the species as it appears in the tree the species names as are in the tree and second the name
+#' of the species used in the database.
+#' @export
+speciesTreeName <- function(treeName) {
+  setPythonEnv()
+  dataSearch <- import_from_path("obtainData", path = system.file("python", package = "traitR", mustWork = TRUE))
+  dataSearch$speciesNameInTree(treeName)
 }
 
 #' @export

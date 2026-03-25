@@ -19,8 +19,8 @@ root of your execution path.
 
 Example, if using RStudio and the project is at /home/user/RProject1 the following should exist:
 
- * /home/user/RProject1/data/
- * /home/user/RProject1/temp/
+ # /home/user/RProject1/data/
+ # /home/user/RProject1/temp/ **
  * /home/user/RProject1/out/
  * /home/user/RProject1/AviList-v2025-11Jun-extended.xlsx
  * /home/user/RProject1/config.json
