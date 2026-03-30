@@ -1,6 +1,10 @@
 import pandas as pd
 import pytaxon
 import chardet
+from pathlib import Path
+
+home = Path.home()
+traitRPath = home/"traitR"
 
 def detectFileEncoding(filePath):
     # Open the file in binary mode ('rb')
@@ -21,7 +25,7 @@ def addDataset(datasetFile,fileType,newName,speciesColumn,sheetList=[1],genusNee
     
     try:
         #datasetList = pd.read_excel("datasetDB.xlsx", header=0)
-        datasetList = pd.read_csv("data/datasetDB.csv", header=0)
+        datasetList = pd.read_csv(traitRPath/"db"/"datasetDB.csv", header=0)
         
         rowsWithDataset = datasetList[datasetList["datasetName"] == newName]
         
@@ -76,7 +80,7 @@ def processDataFrame(datasetToAddDf,newName,speciesColumn,genusNeeded,genusColum
     
     pt.create_to_correct_spreadsheet('test')
     #Load species list
-    speciesFile = "data/species_subspeciesOnly.csv"
+    speciesFile = traitRPath/"db"/"species_subspeciesOnly.csv"
     
     #speciesDf = pd.read_excel(speciesFile,header=0)
     speciesDf = pd.read_csv(speciesFile,header=0)
@@ -87,7 +91,7 @@ def processDataFrame(datasetToAddDf,newName,speciesColumn,genusNeeded,genusColum
     
     try:
         #datasetList = pd.read_excel("datasetDB.xlsx", header=0)
-        datasetList = pd.read_csv("data/datasetDB.csv", header=0)
+        datasetList = pd.read_csv(traitRPath/"db"/"datasetDB.csv", header=0)
         
         rowsWithDataset = datasetList[datasetList["datasetName"] == newName]
         
@@ -127,7 +131,7 @@ def processDataFrame(datasetToAddDf,newName,speciesColumn,genusNeeded,genusColum
     
     #load file with species that need to be verified
     #verificationFile = "newSpecies.xlsx"
-    verificationFile = "data/newSpecies.csv"
+    verificationFile = traitRPath/"db"/"newSpecies.csv"
     
     try:
         #speciesToVerifyList = pd.read_excel(verificationFile, header=0)
@@ -255,11 +259,11 @@ def processDataFrame(datasetToAddDf,newName,speciesColumn,genusNeeded,genusColum
     
     #datasetToAddDf.to_excel("textBeak.xlsx", index=False)
     #datasetToAddDf.to_excel(f"{newName}.xlsx", index=False)
-    datasetToAddDf.to_csv(f"data/{newName}.csv", index=False)
+    datasetToAddDf.to_csv(traitRPath/"db"/f"{newName}.csv", index=False)
     #datasetDf.to_excel("bigDataCompilation.xlsx", index=False)
         
     #datasetList.to_excel("datasetDB.xlsx", index=False)
-    datasetList.to_csv("data/datasetDB.csv", index=False)
+    datasetList.to_csv(traitRPath/"db"/"datasetDB.csv", index=False)
 
 #def main():
     

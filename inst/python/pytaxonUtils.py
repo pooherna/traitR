@@ -2,6 +2,9 @@ import pandas as pd
 import pytaxon
 from pathlib import Path
 
+home = Path.home()
+traitRPath = home/"traitR"
+
 def getPytaxonSpeciesName(speciesList):
     speciesForPytaxon = []
     pytaxonNames = []
@@ -22,11 +25,11 @@ def getPytaxonSpeciesName(speciesList):
     #print(f"Number of columns in speciesToAdd {len(speciesToAdd[0])}")
     speciesPytaxonDF = pd.DataFrame(speciesForPytaxon, columns=["species","scientificName"])
         
-    speciesPytaxonDF.to_excel("temp/pytaxonTemp.xlsx", index=False)
+    speciesPytaxonDF.to_excel(traitRPath/"temp"/"pytaxonTemp.xlsx", index=False)
         
     #Run Pytaxon
     pt = pytaxon.Pytaxon(11)
-    pt.read_spreadshet("temp/pytaxonTemp.xlsx")
+    pt.read_spreadshet(traitRPath/"temp"/"pytaxonTemp.xlsx")
     pt.read_columns(f"x,x,x,x,x,x,species,scientificName")
     pt.check_species_and_lineage()     
     

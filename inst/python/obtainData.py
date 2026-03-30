@@ -1,14 +1,18 @@
 import pandas as pd
 import pytaxon
+from pathlib import Path
+
+home = Path.home()
+traitRPath = home/"traitR"
 
 def obtainData(speciesToFind,dataToFind,datasets):       
     
     allData = None
-    first = True    
+    first = True
     
     #Load species file
     #speciesFile = "species_subspeciesOnly.xlsx"
-    speciesFile = "data/species_subspeciesOnly.csv"
+    speciesFile = traitRPath/"db"/"species_subspeciesOnly.csv"
     
     #speciesList = pd.read_excel(speciesFile,header=0)
     speciesList = pd.read_csv(speciesFile,header=0)
@@ -17,7 +21,7 @@ def obtainData(speciesToFind,dataToFind,datasets):
     
     #Load dataset list
     #datasetFile = "datasetDB.xlsx"
-    datasetFile = "data/datasetDB.csv"
+    datasetFile = traitRPath/"db"/"datasetDB.csv"
     
     #datasetList = pd.read_excel(datasetFile,header=0)
     datasetList = pd.read_csv(datasetFile,header=0)
@@ -31,7 +35,7 @@ def obtainData(speciesToFind,dataToFind,datasets):
         #print(f"Dataset is: {element}")
         rowsDataset = datasetList[datasetList["datasetName"] == element]
         #datasetData = pd.read_excel(rowsDataset.at[rowsDataset.index[0],"datasetFile"])
-        datasetData = pd.read_csv(f"data/{rowsDataset.at[rowsDataset.index[0],"datasetFile"]}")
+        datasetData = pd.read_csv(traitRPath/"db"/f"{rowsDataset.at[rowsDataset.index[0],"datasetFile"]}")
         
         if index == 0:
             compiledData = pd.merge(compiledData, datasetData, how="left", left_on="Sequence", right_on="SequenceSpecies", suffixes=("_species",f"_dataset{index}"))
@@ -68,7 +72,7 @@ def obtainData(speciesToFind,dataToFind,datasets):
         else:
             allData = pd.concat([allData, speciesData], ignore_index=True)
         
-    allData.to_csv(f"out/multipleObtain.csv", index=False)
+    allData.to_csv(traitRPath/"out"/"multipleObtain.csv", index=False)
     
     return allData    
     
@@ -94,13 +98,13 @@ def obtainDataMultipleSpecies(speciesToFind,dataToFind,dataset):
         else:
             allData = pd.concat([allData, speciesData], ignore_index=True)
         
-    allData.to_csv(f"out/multipleObtain.csv", index=False)
+    allData.to_csv(traitRPath/"out"/"multipleObtain.csv", index=False)
     
     return allData
 
 def datasetsWithSpecies(speciesInterestList):
     #Load species list
-    speciesFile = "data/species_subspeciesOnly.csv"
+    speciesFile = traitRPath/"db"/"species_subspeciesOnly.csv"
     
     #speciesDf = pd.read_excel(speciesFile,header=0)
     speciesList = pd.read_csv(speciesFile,header=0)
@@ -140,7 +144,7 @@ def datasetsWithSpecies(speciesInterestList):
 
 def traitsInDatasets(datasetInterestList):
     
-    datasetFile = "data/datasetDB.csv"
+    datasetFile = traitRPath/"db"/"datasetDB.csv"
     #datasetList = pd.read_excel(datasetFile, header=0)
     datasetList = pd.read_csv(datasetFile, header=0)
     
@@ -158,10 +162,10 @@ def traitsInDatasets(datasetInterestList):
     return traitsFound.split(",")
 
 def treesWithSpecies(speciesInterestList):
-    treeFileName = "data/trees.csv"
+    treeFileName = traitRPath/"db"/"trees.csv"
     recordedTreesDF = pd.read_csv(treeFileName,header=0)
     
-    speciesFile = "data/species_subspeciesOnly.csv"
+    speciesFile = traitRPath/"db"/"species_subspeciesOnly.csv"
     
     speciesList = pd.read_csv(speciesFile,header=0)    
     
@@ -202,7 +206,7 @@ def treesWithSpecies(speciesInterestList):
     return treesFound.split(",")  
 
 def speciesInTrees(treesList):
-    treeFileName = "data/trees.csv"
+    treeFileName = traitRPath/"db"/"trees.csv"
     recordedTreesDF = pd.read_csv(treeFileName,header=0)
     
     speciesFound = []
@@ -219,7 +223,7 @@ def speciesInTrees(treesList):
     return speciesFound
 
 def speciesNameInTree(tree):
-    treeFileName = "data/trees.csv"
+    treeFileName = traitRPath/"db"/"trees.csv"
     recordedTreesDF = pd.read_csv(treeFileName,header=0)
     
     speciesFound = []
@@ -242,7 +246,7 @@ def speciesNameInTree(tree):
     return speciesFound
 
 def listTrees():
-    treeFileName = "data/trees.csv"
+    treeFileName = traitRPath/"db"/"trees.csv"
     
     recordedTreesDF = pd.read_csv(treeFileName,header=0)
     
@@ -251,7 +255,7 @@ def listTrees():
     return treeData
 
 def listDatasets():
-    datasetFileName = "data/datasetDB.csv"
+    datasetFileName = traitRPath/"db"/"datasetDB.csv"
     
     recordedDatasetsDF = pd.read_csv(datasetFileName,header=0)
     

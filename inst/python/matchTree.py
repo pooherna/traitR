@@ -5,6 +5,8 @@ from pathlib import Path
 import json 
 import numpy as np 
 
+home = Path.home()
+traitRPath = home/"traitR"
 
 def get_species_in_db(species, db):
     sn = db[db['Scientific_name'].isin(species)]['Scientific_name']
@@ -54,11 +56,11 @@ def get_pytaxon_names(species):
     # Prepare data
     data = [[name, name] for name in species]
     data = pd.DataFrame(data, columns=["species", "scientificName"])
-    data.to_csv("temp/pytaxonTemp.csv", index=False)
+    data.to_csv(traitRPath/"temp"/"pytaxonTemp.csv", index=False)
     
     # Pytaxon look-up
     pt = pytaxon.Pytaxon(11)
-    pt.read_spreadshet("temp/pytaxonTemp.csv")
+    pt.read_spreadshet(traitRPath/"temp"/"pytaxonTemp.csv")
     pt.read_columns(f"x,x,x,x,x,x,species,scientificName")
     pt.check_species_and_lineage()
     
@@ -77,7 +79,7 @@ def get_pytaxon_names(species):
     
     df = df[df['new_name'] != '']
     df = df.reset_index(drop=True)
-    df.to_csv("temp/pytaxonNames.csv", index=False)
+    df.to_csv(traitRPath/"temp"/"pytaxonNames.csv", index=False)
 
     return df
 
@@ -214,7 +216,7 @@ def add_tree(tree_path, tree_format="newick"):
     species = [leaf.name.replace("_", " ") for leaf in leaves]
 
     # Read db
-    db_file = "data/species_subspeciesOnly.csv"
+    db_file = traitRPath/"db"/"species_subspeciesOnly.csv"
     db = pd.read_csv(db_file, header=0)
     db = db.fillna("")
 
@@ -243,14 +245,14 @@ def add_tree(tree_path, tree_format="newick"):
     db.to_csv(db_file, index=False)
 
     # Update verify
-    verify_file = "data/newSpecies.csv"
+    verify_file = traitRPath/"db"/"newSpecies.csv"
     if Path(verify_file).is_file(): verify = pd.read_csv(verify_file).fillna("")
     else: verify = pd.DataFrame(columns=db.columns.tolist() + ['speciesDatasetName'])
     verify = update_verify(verify, species_not_in_db_pt, pt, tree_path)
     verify.to_csv(verify_file, index=False)
 
     # Update tree file
-    tree_registry_file = "data/trees.csv"
+    tree_registry_file = traitRPath/"db"/"trees.csv"
     if Path(tree_registry_file).is_file(): tree_registry = pd.read_csv(tree_registry_file, header=0)
     else: tree_registry = pd.DataFrame(columns=["treeName", "treeLocation", "speciesIncluded", "speciesIncludedWithOriginal"])
     tree_registry = update_tree_registry(tree_registry, species, pt, tree_path)
@@ -272,7 +274,7 @@ def addTree(treeFilename, treeFormat = "newick"):
     """
 
     # 1) List of Species 
-    speciesFilename = "data/species_subspeciesOnly.csv"
+    speciesFilename = traitRPath/"db"/"species_subspeciesOnly.csv"
     #speciesDf = pd.read_excel(speciesFilename,header=0)
     speciesDf = pd.read_csv(speciesFilename,header=0)
 
@@ -281,9 +283,9 @@ def addTree(treeFilename, treeFormat = "newick"):
     
     # 3) Species "to verify" i.e. not on Pytaxon / List of Species (step 1)
     #verificationFile = "newSpecies.xlsx"
-    verificationFile = "data/newSpecies.csv"
+    verificationFile = traitRPath/"db"/"newSpecies.csv"
     #treeDatasetFile = "trees.xlsx"
-    treeDatasetFile = "data/trees.csv"
+    treeDatasetFile = traitRPath/"db"/"trees.csv"
     
     try:
         #speciesToVerifyList = pd.read_excel(verificationFile, header=0)
@@ -320,11 +322,11 @@ def addTree(treeFilename, treeFormat = "newick"):
     speciesPytaxonDF = pd.DataFrame(speciesForPytaxon, columns=["species","scientificName"])
     
     # 8) Save the DataFrame (step 7) as a temporary Excel file
-    speciesPytaxonDF.to_excel("temp/pytaxonTemp.xlsx", index=False)
+    speciesPytaxonDF.to_excel(traitRPath/"temp"/"pytaxonTemp.xlsx", index=False)
         
     # 9) Run Pytaxon - source_id=11
     pt = pytaxon.Pytaxon(11)
-    pt.read_spreadshet("temp/pytaxonTemp.xlsx") # Reads the spreadsheet (see Step 7)
+    pt.read_spreadshet(traitRPath/"temp"/"pytaxonTemp.xlsx") # Reads the spreadsheet (see Step 7)
     pt.read_columns(f"x,x,x,x,x,x,species,scientificName") # Prints "Columns choosed." when successful.
     pt.check_species_and_lineage() # QUESTION: Performs the query
     

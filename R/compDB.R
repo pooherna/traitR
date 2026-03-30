@@ -17,9 +17,59 @@ library(reticulate)
 #use_python('C:/Users/Finrodpoo/AppData/Local/Programs/Python/Python312/', required = TRUE)
 setPythonEnv <- function() {
 
-  py_require('pandas,openpyxl,tqdm,requests,jinja2,biopython,chardet')
+  py_require('pandas,openpyxl,tqdm,requests,jinja2,biopython,chardet,pathlib')
 }
 
+.onLoad <- function(libname, pkgname){
+
+  if (!file.exists("config.json")){
+    config_path_in_pkg <- system.file("extdata", "config.json", package = "traitR", mustWork = TRUE)
+    avilist_path_in_pkg <- system.file("extdata", "AviList-v2025-11Jun-extended.xlsx", package = "traitR", mustWork = TRUE)
+    mammal_path_in_pkg <- system.file("extdata", "mdd.csv", package = "traitR", mustWork = TRUE)
+    test_path_in_pkg <- system.file("extdata", "Species_Scientific.csv", package = "traitR", mustWork = TRUE)
+    destination_dir <- getwd()
+
+    file.copy(from = config_path_in_pkg, to = destination_dir)
+    file.copy(from = avilist_path_in_pkg, to = destination_dir)
+    file.copy(from = test_path_in_pkg, to = destination_dir)
+    file.copy(from = mammal_path_in_pkg, to = destination_dir)
+  }
+
+  setPythonEnv()
+  setup <- import_from_path("setup", path = system.file("python", package = "traitR", mustWork = TRUE))
+  setup$folderSetup()
+}
+
+#' @export
+setupExample <- function(){
+
+  sample_path_in_pkg <- system.file("extdata","toySample", package = "traitR", mustWork = TRUE)
+  sample_data <- "data"
+  sample_data_path_in_pkg <- file.path(sample_path_in_pkg,sample_data)
+  #sample_code_path_in_pkg <- system.file("vignettes", package = "traitR", mustWork = TRUE)
+  sample_tree_name <- "phylogenetic_tree.tre"
+  sample_dataset <- "Rawdata_updated_2.csv"
+  sample_code <- "example.R"
+
+  destination_dir <- getwd()
+  sample_path_destination <- file.path(destination_dir,"traitRExample")
+
+  if (!dir.exists(sample_path_destination)){
+    dir.create(sample_path_destination)
+    print(paste("Created directory:",sample_path_destination))
+  }
+
+  file.copy(from=file.path(sample_data_path_in_pkg,sample_tree_name),sample_path_destination)
+  file.copy(from=file.path(sample_data_path_in_pkg,sample_dataset),sample_path_destination)
+  file.copy(from=file.path(sample_path_in_pkg,sample_code),destination_dir)
+}
+
+#' @export
+resetDatabase <- function() {
+  setPythonEnv()
+  setup <- import_from_path("setup", path = system.file("python", package = "traitR", mustWork = TRUE))
+  setup$reset()
+}
 
 #source_python('inst/python/speciesLoader.py')
 #source_python('inst/python/datasetLoader.py')
